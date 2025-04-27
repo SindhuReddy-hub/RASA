@@ -89,3 +89,33 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+nlu:
+- intent: list_lambda_functions
+  examples: |
+    - List Lambda functions
+    - What Lambda functions are available?
+
+- intent: invoke_lambda_function
+  examples: |
+    - Invoke Lambda [my-function](function_name)
+    - Call Lambda [send-notification](function_name)
+
+- intent: list_s3_buckets
+  examples: |
+    - List all S3 buckets
+    - Show me the S3 buckets
+
+- intent: list_s3_objects
+  examples: |
+    - List objects in [my-bucket](bucket_name)
+    - Show contents of [data-bucket](bucket_name)
+
+- intent: download_s3_object
+  examples: |
+    - Download [reports/summary.pdf](object_key) from [my-bucket](bucket_name)
+    - Get [images/photo.jpg](object_key) from [photos-bucket](bucket_name)
+
+- intent: upload_s3_object
+  examples: |
+    - Upload [documents/report.pdf](local_file_path) to [upload-bucket](bucket_name)
+    - Put file [local/path/to/image.jpg](local_file_path) in [images-bucket](bucket_name)
