@@ -28,3 +28,43 @@ stories:
   - action: utter_did_that_help
   - intent: deny
   - action: utter_goodbye
+
+- story: List Lambda functions
+  steps:
+    - intent: list_lambda_functions
+    - action: action_lambda_operations
+
+- story: Invoke a Lambda function
+  steps:
+    - intent: invoke_lambda_function
+      entities:
+        - function_name: "my-function"
+    - action: action_lambda_operations
+
+- story: List S3 Buckets
+  steps:
+    - intent: list_s3_buckets
+    - action: action_s3_operations
+
+- story: List Objects inside a Bucket
+  steps:
+    - intent: list_s3_objects
+      entities:
+        - bucket_name: "example-bucket"
+    - action: action_s3_operations
+
+- story: Download a file from S3
+  steps:
+    - intent: download_s3_object
+      entities:
+        - bucket_name: "example-bucket"
+        - object_key: "folder/file.txt"
+    - action: action_s3_operations
+
+- story: Upload a file to S3
+  steps:
+    - intent: upload_s3_object
+      entities:
+        - bucket_name: "example-bucket"
+        - local_file_path: "/path/to/local/file.txt"
+    - action: action_s3_operations
