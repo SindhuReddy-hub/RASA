@@ -89,16 +89,23 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
-nlu:
-- intent: list_lambda_functions
+- intent: list_lambda
   examples: |
-    - List Lambda functions
-    - What Lambda functions are available?
+    - list all lambda functions
+    - show me the lambda functions
+    - what are the available lambda functions
+    - give me the list of lambda functions
+    - fetch lambda functions
+    - display all AWS lambda functions
 
-- intent: invoke_lambda_function
+- intent: invoke_lambda
   examples: |
-    - Invoke Lambda [my-function](function_name)
-    - Call Lambda [send-notification](function_name)
+    - invoke lambda function [func1](function_name)
+    - run lambda function [func1](function_name)
+    - execute lambda [func1](function_name)
+    - trigger lambda function [func1](function_name)
+    - call the lambda function [func1](function_name)
+    - start the lambda function [func1](function_name)
 
 - intent: list_s3_buckets
   examples: |
