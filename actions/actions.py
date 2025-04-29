@@ -72,8 +72,9 @@ class ActionLambdaOperations(Action):
                     text=True,
                     check=True
                 )
-                with open(response_file, "r") as f:
-                    response_content = f.read()
+             if os.path.exists(response_file):
+    with open(response_file, "r") as f:
+        response_content = f.read()
                 dispatcher.utter_message(text=f"Lambda Response:\n{response_content}")
 
             else:
