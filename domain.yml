@@ -47,3 +47,27 @@ entities:
 actions:
   - action_lambda_operations
   - action_s3_operations
+
+
+  version: "3.1"
+
+intents:
+  - list_step_functions
+  - start_step_function_execution
+
+entities:
+  - state_machine_name
+
+slots:
+  state_machine_name:
+    type: text
+    influence_conversation: false
+
+responses:
+  utter_ask_state_machine_name:
+    - text: "Which state machine do you want to execute?"
+
+actions:
+  - action_list_step_functions
+  - action_start_step_function_execution
+
