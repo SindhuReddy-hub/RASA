@@ -165,3 +165,97 @@ class ActionS3Operations(Action):
             dispatcher.utter_message(text=f"An unexpected error occurred: {str(e)}")
 
         return []
+
+
+from typing import Any, Text, Dict, List
+from rasa_sdk import Action, Tracker
+from rasa_sdk.executor import CollectingDispatcher
+import subprocess
+import json
+
+class ActionManageStepFunctions(Action):
+    def name(self) -> Text:
+        return "action_manage_stepfunctions"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        
+        # Find the latest user intent
+        latest_intent = tracker.get_intent_of_latest_message()
+        dispatcher.utter_message(text=f"Detected intent: {latest_intent}")
+
+        if latest_intent == "list_step_functions":
+            return self.list_step_functions(dispatcher)
+        
+        elif latest_intent == "start_step_function_execution":
+            return self.start_step_function_execution(dispatcher, tracker)
+        
+        else:
+            dispatcher.utter_message(text="I'm not sure how to handle this step function request.")
+            return []
+
+    def list_step_functions(self, dispatcher):
+        try:
+            dispatcher.utter_message(text="Fetching list of Step Functions...")
+
+            output_text = subprocess.check_output(
+                ["aws", "stepfunctions", "list-state-machines", "--region", "us-east-1"],
+                text=True
+            )
+            output_json = json.loads(output_text)
+
+            state_machines = output_json.get('stateMachines', [])
+            if state_machines:
+                names = [f"• {sm['name']}" for sm in state_machines]
+                dispatcher.utter_message(text="\n".join(names))
+            else:
+                dispatcher.utter_message(text="No state machines found.")
+
+        except subprocess.CalledProcessError as e:
+            dispatcher.utter_message(text=f"Command failed: {e.output}")
+        except Exception as e:
+            dispatcher.utter_message(text=f"Unexpected error: {str(e)}")
+
+        return []
+
+    def start_step_function_execution(self, dispatcher, tracker):
+        try:
+            state_machine_name = next(tracker.get_latest_entity_values("state_machine_name"), None)
+            if not state_machine_name:
+                dispatcher.utter_message(text="Please specify the state machine name to start.")
+                return []
+
+            dispatcher.utter_message(text=f"Starting execution of state machine: {state_machine_name}...")
+
+            # Find the full ARN
+            list_output = subprocess.check_output(
+                ["aws", "stepfunctions", "list-state-machines", "--region", "us-east-1"],
+                text=True
+            )
+            list_json = json.loads(list_output)
+            state_machines = list_json.get('stateMachines', [])
+
+            matching_machine = next((sm for sm in state_machines if sm['name'] == state_machine_name), None)
+
+            if not matching_machine:
+                dispatcher.utter_message(text=f"No state machine found with name: {state_machine_name}")
+                return []
+
+            state_machine_arn = matching_machine['stateMachineArn']
+
+            # Start execution
+            start_output = subprocess.check_output(
+                ["aws", "stepfunctions", "start-execution", "--state-machine-arn", state_machine_arn],
+                text=True
+            )
+
+            dispatcher.utter_message(text=f"Execution started successfully for {state_machine_name}!")
+
+        except subprocess.CalledProcessError as e:
+            dispatcher.utter_message(text=f"Command failed: {e.output}")
+        except Exception as e:
+            dispatcher.utter_message(text=f"Unexpected error: {str(e)}")
+
+        return []
+
