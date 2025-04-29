@@ -126,3 +126,21 @@ nlu:
   examples: |
     - Upload [documents/report.pdf](local_file_path) to [upload-bucket](bucket_name)
     - Put file [local/path/to/image.jpg](local_file_path) in [images-bucket](bucket_name)
+- intent: list_step_functions
+  examples: |
+    - list all step functions
+    - show me the step functions
+    - what are the available state machines
+    - list state machines
+    - fetch step functions
+    - display all AWS step functions
+
+- intent: start_step_function_execution
+  examples: |
+    - start execution of step function [MyStateMachine](state_machine_name)
+    - run the state machine [MyStateMachine](state_machine_name)
+    - execute the step function [MyStateMachine](state_machine_name)
+    - trigger state machine [MyStateMachine](state_machine_name)
+    - begin execution of [MyStateMachine](state_machine_name)
+    - start [MyStateMachine](state_machine_name)
+    
