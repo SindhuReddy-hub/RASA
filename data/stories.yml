@@ -68,3 +68,15 @@ stories:
         - bucket_name: "example-bucket"
         - local_file_path: "/path/to/local/file.txt"
     - action: action_s3_operations
+
+
+stories:
+- story: List Step Functions
+  steps:
+    - intent: list_step_functions
+    - action: action_list_step_functions
+
+- story: Start Step Function Execution
+  steps:
+    - intent: start_step_function_execution
+    - action: action_start_step_function_execution
