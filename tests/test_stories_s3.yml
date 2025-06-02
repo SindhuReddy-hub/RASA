@@ -1,0 +1,50 @@
+version: "3.1"
+stories:
+
+- story: List all S3 buckets
+  steps:
+  - user: |
+      I want to list all my S3 buckets
+    intent: list_s3_buckets
+  - action: action_list_s3_buckets
+  - slot_was_set:
+    - s3_buckets: ["my-bucket", "logs-bucket"]
+  - action: utter_list_s3_buckets
+
+- story: List objects in a specific bucket
+  steps:
+  - user: |
+      Show me files in my-bucket
+    intent: list_files_in_bucket
+    entities:
+      - bucket_name: "my-bucket"
+  - slot_was_set:
+    - bucket_name: "my-bucket"
+  - action: action_list_files_in_bucket
+  - action: utter_list_files
+
+- story: Download a file from S3
+  steps:
+  - user: |
+      Download file report.csv from bucket my-bucket
+    intent: download_file
+    entities:
+      - bucket_name: "my-bucket"
+      - file_name: "report.csv"
+  - slot_was_set:
+    - bucket_name: "my-bucket"
+    - file_name: "report.csv"
+  - action: action_download_file
+  - action: utter_download_success
+
+- story: Upload a file to S3
+  steps:
+  - user: |
+      Upload this file to my-bucket
+    intent: upload_file
+    entities:
+      - bucket_name: "my-bucket"
+  - slot_was_set:
+    - bucket_name: "my-bucket"
+  - action: action_upload_file
+  - action: utter_upload_success
