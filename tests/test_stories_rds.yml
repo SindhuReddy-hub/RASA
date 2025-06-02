@@ -1,0 +1,48 @@
+version: "3.1"
+stories:
+
+- story: List all RDS instances
+  steps:
+  - user: |
+      Show me all my RDS instances
+    intent: list_rds_instances
+  - action: action_list_rds_instances
+  - slot_was_set:
+    - rds_instances: ["test-db", "prod-db"]
+  - action: utter_list_rds_instances
+
+- story: Describe a specific RDS instance
+  steps:
+  - user: |
+      Describe the test-db instance
+    intent: describe_rds_instance
+    entities:
+      - db_instance_identifier: "test-db"
+  - slot_was_set:
+    - db_instance_identifier: "test-db"
+  - action: action_describe_rds_instance
+  - action: utter_describe_rds_instance
+
+- story: Start an RDS instance
+  steps:
+  - user: |
+      Start the prod-db instance
+    intent: start_rds_instance
+    entities:
+      - db_instance_identifier: "prod-db"
+  - slot_was_set:
+    - db_instance_identifier: "prod-db"
+  - action: action_start_rds_instance
+  - action: utter_rds_start_success
+
+- story: Stop an RDS instance
+  steps:
+  - user: |
+      Stop test-db
+    intent: stop_rds_instance
+    entities:
+      - db_instance_identifier: "test-db"
+  - slot_was_set:
+    - db_instance_identifier: "test-db"
+  - action: action_stop_rds_instance
+  - action: utter_rds_stop_success
